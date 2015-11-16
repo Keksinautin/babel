@@ -1,5 +1,3 @@
-/* @flow */
-
 import repeating from "repeating";
 import Buffer from "./buffer";
 import n from "./node";
@@ -74,7 +72,7 @@ export default class Printer extends Buffer {
 
   printAuxBeforeComment(wasInAux) {
     let comment = this.format.auxiliaryCommentBefore;
-    if (!wasInAux && this.insideAux) {
+    if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = true;
       if (comment) this.printComment({
         type: "CommentBlock",

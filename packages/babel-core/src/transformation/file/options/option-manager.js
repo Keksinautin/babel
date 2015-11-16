@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as context from "../../../api/node";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
@@ -32,6 +30,19 @@ function exists(filename) {
   }
 }
 
+type PluginObject = {
+  pre?: Function;
+  post?: Function;
+  manipulateOptions?: Function;
+
+  visitor: ?{
+    [key: string]: Function | {
+      enter?: Function | Array<Function>;
+      exit?: Function | Array<Function>;
+    }
+  };
+};
+
 export default class OptionManager {
   constructor(log?: Logger) {
     this.resolvedConfigs = [];
@@ -48,12 +59,12 @@ export default class OptionManager {
     plugin: Plugin;
   }>;
 
-  static memoisePluginContainer(fn, loc, i) {
+  static memoisePluginContainer(fn, loc, i, alias) {
     for (let cache of (OptionManager.memoisedPlugins: Array<Object>)) {
       if (cache.container === fn) return cache.plugin;
     }
 
-    let obj;
+    let obj: ?PluginObject;
 
     if (typeof fn === "function") {
       obj = fn(context);
@@ -62,7 +73,7 @@ export default class OptionManager {
     }
 
     if (typeof obj === "object") {
-      let plugin = new Plugin(obj);
+      let plugin = new Plugin(obj, alias);
       OptionManager.memoisedPlugins.push({
         container: fn,
         plugin: plugin
@@ -84,13 +95,13 @@ export default class OptionManager {
     return opts;
   }
 
-  static normalisePlugin(plugin, loc, i) {
+  static normalisePlugin(plugin, loc, i, alias) {
     plugin = plugin.__esModule ? plugin.default : plugin;
 
     if (!(plugin instanceof Plugin)) {
       // allow plugin containers to be specified so they don't have to manually require
       if (typeof plugin === "function" || typeof plugin === "object") {
-        plugin = OptionManager.memoisePluginContainer(plugin, loc, i);
+        plugin = OptionManager.memoisePluginContainer(plugin, loc, i, alias);
       } else {
         throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
       }
@@ -112,6 +123,8 @@ export default class OptionManager {
         plugin = val;
       }
 
+      let alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
+
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
         let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
@@ -122,7 +135,7 @@ export default class OptionManager {
         }
       }
 
-      plugin = OptionManager.normalisePlugin(plugin, loc, i);
+      plugin = OptionManager.normalisePlugin(plugin, loc, i, alias);
 
       return [plugin, options];
     });
