@@ -15,9 +15,9 @@ export default class Printer extends Buffer {
   print(node, parent, opts = {}) {
     if (!node) return;
 
-    console.log('Printer.prototype.print', node ? 'node.loc:' + typeof node.loc : 'node:' + typeof node);
+    console.log('--Printer.print->node.loc:', typeof node.loc);
     if (c === 0) {
-      console.log('Printer.prototype.print', new Error().stack);
+      console.log('--Printer.print->stack:', new Error().stack);
       c++;
     }
 
@@ -105,8 +105,8 @@ export default class Printer extends Buffer {
       this.push("");
       this._push(extra);
     } else {
-      console.log('Printer.prototype._print---- typeof node.loc', typeof node.loc);
-      console.log('Printer.prototype._print----', new Error().stack);
+      console.log('--|--Printer._print->typeof node.loc:', typeof node.loc);
+      console.log('--|--Printer._print->stack:', new Error().stack);
 
       let printMethod = this[node.type];
       printMethod.call(this, node, parent);

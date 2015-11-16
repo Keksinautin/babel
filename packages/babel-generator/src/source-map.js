@@ -48,7 +48,9 @@ export default class SourceMap {
    */
 
   mark(node, type) {
-    console.log('SourceMap.prototype.mark:mappings::1');
+    console.log('-SourceMap.mark->::1');
+    console.log('-SourceMap.mark->type:', type);
+    console.log('-SourceMap.mark->NODE:', node);
     //console.log('SourceMap.prototype.mark:mappings::1', node.loc);
     //if (++_cc >= 54 && _cc <= 74) {
     //  console.log('t', new Error().stack);
@@ -57,7 +59,7 @@ export default class SourceMap {
 
     let loc = node.loc;
     if (!loc) return; // no location info
-    console.log('pas if (!loc) return');
+    console.log('--|--|--pased "if (!loc)"');
 
     let map = this.map;
     if (!map) return; // no source map
@@ -79,6 +81,6 @@ export default class SourceMap {
       original: original
     });
 
-    console.log('SourceMap.prototype.mark:mappings::2');
+    console.log('-SourceMap.mark->::222222222222');
   }
 }

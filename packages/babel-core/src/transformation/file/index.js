@@ -165,6 +165,7 @@ export default class File extends Store {
   }
 
   buildPlugins() {
+    console.log('this.opts.plugins', this.opts.plugins);
     let plugins: Array<[PluginPass, Object]> = this.opts.plugins.concat(INTERNAL_PLUGINS);
 
     // init plugins!
@@ -413,8 +414,11 @@ export default class File extends Store {
   transform(): BabelFileResult {
     this.call("pre");
     this.log.debug(`Start transform traverse`);
+    console.log(`###Start transform traverse###`);
+    console.log('--File.transform->this.pluginVisitors', this.pluginVisitors.length);
     traverse(this.ast, traverse.visitors.merge(this.pluginVisitors, this.pluginPasses), this.scope);
     this.log.debug(`End transform traverse`);
+    console.log(`###End transform traverse###`);
     this.call("post");
     return this.generate();
   }
