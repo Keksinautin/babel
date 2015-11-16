@@ -14,6 +14,9 @@ export function Program(node: Object) {
 }
 
 export function BlockStatement(node: Object) {
+  console.log('---BlockStatement', node ? 'node.loc:' + typeof node.loc : 'node:' + typeof node);
+  console.log('---BlockStatement', new Error().stack);
+
   this.push("{");
   this.printInnerComments(node);
   if (node.body.length) {

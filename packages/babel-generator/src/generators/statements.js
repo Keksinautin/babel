@@ -178,6 +178,7 @@ export function DebuggerStatement() {
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
+  console.log('---VariableDeclaraTION--- ==>', typeof node.loc);
   this.push(node.kind + " ");
 
   let hasInits = false;
@@ -218,9 +219,11 @@ export function VariableDeclaration(node: Object, parent: Object) {
   }
 
   this.semicolon();
+  console.log('---VariableDeclaraTION--- <==');
 }
 
 export function VariableDeclarator(node: Object) {
+  console.log('---VariableDeclarator--- ==>', typeof node.loc);
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
@@ -229,4 +232,5 @@ export function VariableDeclarator(node: Object) {
     this.space();
     this.print(node.init, node);
   }
+  console.log('---VariableDeclarator--- <==');
 }

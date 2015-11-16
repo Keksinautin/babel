@@ -12,16 +12,24 @@ export default class SourceMap {
     this.position = position;
     this.opts     = opts;
 
+    //console.log('-----');
+    //console.log('file: opts.sourceMapTarget', opts.sourceMapTarget);
+    //console.log('sourceRoot: opts.sourceRoot', opts.sourceRoot);
+
     if (opts.sourceMaps) {
       this.map = new sourceMap.SourceMapGenerator({
         file: opts.sourceMapTarget,
         sourceRoot: opts.sourceRoot
       });
 
+      //console.log('setSourceContent:opts.sourceFileName', opts.sourceFileName);
+      //console.log('setSourceContent:code', code);
       this.map.setSourceContent(opts.sourceFileName, code);
     } else {
       this.map = null;
     }
+
+    //console.log('-----');
   }
 
   /**
@@ -42,8 +50,16 @@ export default class SourceMap {
    */
 
   mark(node, type) {
+    console.log('SourceMap.prototype.mark:mappings::1');
+    //console.log('SourceMap.prototype.mark:mappings::1', node.loc);
+    //if (++_cc >= 54 && _cc <= 74) {
+    //  console.log('t', new Error().stack);
+    //}
+    //console.log('t', new Error().stack);
+
     let loc = node.loc;
     if (!loc) return; // no location info
+    console.log('pas if (!loc) return');
 
     let map = this.map;
     if (!map) return; // no source map
@@ -64,5 +80,7 @@ export default class SourceMap {
       generated: generated,
       original: original
     });
+
+    console.log('SourceMap.prototype.mark:mappings::2');
   }
 }

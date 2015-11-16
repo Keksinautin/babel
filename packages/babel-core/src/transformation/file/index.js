@@ -543,6 +543,7 @@ export default class File extends Store {
     let _result = generate(ast, opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
+    //console.log("map", result.map);
 
     this.log.debug("Generation end");
 

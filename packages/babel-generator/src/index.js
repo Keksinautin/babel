@@ -149,8 +149,11 @@ export class CodeGenerator extends Printer {
     this.print(this.ast);
     this.printAuxAfterComment();
 
+    let m = this.map.get();
+    //console.log('m', m);
+
     return {
-      map:  this.map.get(),
+      map:  m,
       code: this.get()
     };
   }

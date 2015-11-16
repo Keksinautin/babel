@@ -5,6 +5,8 @@ import Buffer from "./buffer";
 import n from "./node";
 import * as t from "babel-types";
 
+let c = 0;
+
 export default class Printer extends Buffer {
   constructor(...args) {
     super(...args);
@@ -14,6 +16,12 @@ export default class Printer extends Buffer {
 
   print(node, parent, opts = {}) {
     if (!node) return;
+
+    console.log('Printer.prototype.print', node ? 'node.loc:' + typeof node.loc : 'node:' + typeof node);
+    if (c === 0) {
+      console.log('Printer.prototype.print', new Error().stack);
+      c++;
+    }
 
     if (parent && parent._compact) {
       node._compact = true;
@@ -99,6 +107,9 @@ export default class Printer extends Buffer {
       this.push("");
       this._push(extra);
     } else {
+      console.log('Printer.prototype._print---- typeof node.loc', typeof node.loc);
+      console.log('Printer.prototype._print----', new Error().stack);
+
       let printMethod = this[node.type];
       printMethod.call(this, node, parent);
     }
@@ -177,6 +188,7 @@ export default class Printer extends Buffer {
   }
 
   printSequence(nodes, parent, opts = {}) {
+    //console.log('***printSequence*** ==>', typeof node.loc);
     opts.statement = true;
     return this.printJoin(nodes, parent, opts);
   }
