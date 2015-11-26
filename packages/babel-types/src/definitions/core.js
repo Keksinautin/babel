@@ -478,7 +478,7 @@ defineType("ObjectMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -498,7 +498,7 @@ defineType("ObjectMethod", {
     }
   },
   visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
-  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method"]
+  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method", "ObjectMember"]
 });
 
 defineType("ObjectProperty", {
@@ -510,7 +510,7 @@ defineType("ObjectProperty", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -527,7 +527,7 @@ defineType("ObjectProperty", {
     }
   },
   visitor: ["key", "value", "decorators"],
-  aliases: ["UserWhitespacable", "Property"]
+  aliases: ["UserWhitespacable", "Property", "ObjectMember"]
 });
 
 defineType("RestElement", {

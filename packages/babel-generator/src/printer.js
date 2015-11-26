@@ -20,6 +20,7 @@ export default class Printer extends Buffer {
       console.log('--Printer.print->stack:', new Error().stack);
       c++;
     }
+    this._lastPrintedIsEmptyStatement = false;
 
     if (parent && parent._compact) {
       node._compact = true;
@@ -55,6 +56,9 @@ export default class Printer extends Buffer {
     this.map.mark(node, "start");
 
     this._print(node, parent);
+
+    // Check again if any of our children may have left an aux comment on the stack
+    if (node.loc) this.printAuxAfterComment();
 
     this.printTrailingComments(node, parent);
 
@@ -152,12 +156,12 @@ export default class Printer extends Buffer {
 
   printBlock(parent) {
     let node = parent.body;
-    if (t.isEmptyStatement(node)) {
-      this.semicolon();
-    } else {
-      this.push(" ");
-      this.print(node, parent);
+
+    if (!t.isEmptyStatement(node)) {
+      this.space();
     }
+
+    this.print(node, parent);
   }
 
   generateComment(comment) {
